@@ -85,6 +85,41 @@
                 padding-left: 0.5rem !important;
             }
         }
+        /* 柔和的果冻动效，无突兀跳动 */
+        @keyframes softJelly {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            25% {
+                transform: scale(0.98) rotate(-0.3deg);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.01) rotate(0.3deg);
+                opacity: 1;
+            }
+
+            75% {
+                transform: scale(0.99) rotate(-0.1deg);
+                opacity: 1;
+            }
+        }
+
+        /* 头像悬浮效果（仅光晕，无位移/缩放跳动） */
+        .header-avatar img {
+            transition: all 0.4s ease;
+            transform-origin: center;
+        }
+
+        .header-avatar img:hover {
+            box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.2);
+            border-color: #3b82f6;
+        }
     </style>
 </head>
 
@@ -94,9 +129,11 @@
         <!-- 头部信息 -->
         <header class="mobile-col items-center justify-between mb-12 bg-white p-6 rounded-lg shadow-md flex">
             <!-- 头像 -->
-            <div class="header-avatar mb-6 md:mb-0">
+            <div class="header-avatar mb-6 md:mb-0 relative">
                 <img data-src="https://picsum.photos/200/200" alt="何永轩个人头像"
-                    class="w-32 h-32 rounded-full object-cover border-4 border-primary lazy-img">
+                src="image\17307927289.png"
+                    class="w-32 h-32 md:w-36 md:h-36 rounded-full object-cover border-4 border-primary lazy-img shadow-md"
+                    style="animation: softJelly 1.2s ease-in-out 0.3s forwards; opacity: 0; transform: scale(0.95);">
             </div>
 
             <!-- 基本信息 -->
