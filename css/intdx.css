@@ -1,0 +1,225 @@
+  /* 核心按钮样式 */
+  .download-resume-btn {
+      /* 基础布局 */
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+
+      /* 视觉样式（匹配简历的primary蓝色系） */
+      background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+      color: white;
+      font-size: 16px;
+      font-weight: 500;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+
+      /* 过渡动效（避免突兀） */
+      transition: all 0.3s ease;
+      transform-origin: center;
+  }
+
+  /* 悬浮效果（轻微缩放+加深阴影，无跳动） */
+  .download-resume-btn:hover {
+      background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+      transform: translateY(-2px) scale(1.02);
+  }
+
+  /* 点击按压效果 */
+  .download-resume-btn:active {
+      transform: translateY(0) scale(0.98);
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+  }
+
+  /* 禁用状态（可选） */
+  .download-resume-btn:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+      opacity: 0.7;
+  }
+
+  /* 适配小屏 */
+  @media (max-width: 768px) {
+      .download-resume-btn {
+          padding: 10px 20px;
+          font-size: 14px;
+          width: 100%;
+          /* 小屏占满宽度，更易点击 */
+      }
+  }
+
+  @layer utilities {
+      .content-auto {
+          content-visibility: auto;
+      }
+
+      .section-title {
+          @apply text-2xl font-bold text-primary border-b-2 border-primary pb-2 mb-6;
+      }
+
+      .card-hover {
+          @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+      }
+
+      /* 响应式补充样式 */
+      .mobile-center {
+          @apply md:text-left text-center;
+      }
+
+      .mobile-col {
+          @apply md:flex-row flex-col;
+      }
+
+      .mobile-w-full {
+          @apply md:w-auto w-full;
+      }
+  }
+
+  /* 平滑滚动全局生效 */
+  html {
+      scroll-behavior: smooth;
+  }
+
+  /* 初始淡入效果 */
+  body {
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+  }
+
+  body.loaded {
+      opacity: 1;
+  }
+
+  /* 小屏适配（768px以下） */
+  @media only screen and (max-width: 768px) {
+      .section {
+          width: 90% !important;
+          padding: 0 10px;
+      }
+
+      .skill-bar {
+          height: 3px !important;
+      }
+
+      .header-avatar {
+          margin-bottom: 1rem !important;
+      }
+
+      .experience-item {
+          padding-left: 0.5rem !important;
+      }
+  }
+
+  /* 柔和的果冻动效，无突兀跳动 */
+  @keyframes softJelly {
+
+      0%,
+      100% {
+          transform: scale(1);
+          opacity: 1;
+      }
+
+      25% {
+          transform: scale(0.98) rotate(-0.3deg);
+          opacity: 1;
+      }
+
+      50% {
+          transform: scale(1.01) rotate(0.3deg);
+          opacity: 1;
+      }
+
+      75% {
+          transform: scale(0.99) rotate(-0.1deg);
+          opacity: 1;
+      }
+  }
+
+  /* 头像悬浮效果（仅光晕，无位移/缩放跳动） */
+  .header-avatar img {
+      transition: all 0.4s ease;
+      transform-origin: center;
+  }
+
+  .header-avatar img:hover {
+      box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.2);
+      border-color: #3b82f6;
+  }
+
+  /* 悬浮窗容器样式 */
+  .floating-window {
+      position: fixed;
+      right: 30px;
+      bottom: 30px;
+      width: 150px;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      cursor: move;
+      /* 拖拽光标 */
+      z-index: 1000;
+      /* 默认层级 */
+      transition: all 0.3s ease;
+  }
+
+  /* 置顶状态样式 */
+  .floating-window.top {
+      z-index: 9999;
+      /* 置顶层级 */
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      transform: scale(1.05);
+  }
+
+  /* 悬浮窗头部 */
+  .window-header {
+      background: #409eff;
+      color: white;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      /* 点击置顶光标 */
+  }
+
+  .window-title {
+      font-size: 14px;
+      font-weight: 500;
+  }
+
+  .close-btn {
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      text-align: center;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      font-size: 14px;
+  }
+
+  /* 二维码展示区域 */
+  .qrcode-container {
+      padding: 10px;
+      text-align: center;
+  }
+
+  .qrcode-img {
+      width: 100%;
+      height: auto;
+      border: 1px solid #eee;
+      border-radius: 4px;
+  }
+
+  .qrcode-tip {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #666;
+  }
