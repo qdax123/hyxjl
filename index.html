@@ -387,49 +387,81 @@
                     }
                 });
             });
-            const floatingWindow = document.getElementById('floatingWindow');
-            const topBtn = document.getElementById('topBtn');
-            const closeBtn = document.getElementById('closeBtn');
 
-            // 点击置顶功能
-            // topBtn.addEventListener('click', function (e) {
-            //     // 阻止事件冒泡，避免触发拖拽
-            //     e.stopPropagation();
-            //     floatingWindow.classList.toggle('top');
+            // 悬浮窗
+            // ========== 优化版关闭功能 ==========
+            function closeFloatingWindow() {
+                // 添加关闭动画
+                floatingWindow.classList.add('closing');
+                // 动画结束后隐藏元素
+                setTimeout(() => {
+                    floatingWindow.style.display = 'none';
+                    // 重置样式（以便重新显示时恢复）
+                    floatingWindow.classList.remove('closing');
+                }, 300); // 与CSS过渡时间一致
+            }
 
-            //     // 更新标题提示
-            //     const title = floatingWindow.classList.contains('top')
-            //         ? '已置顶（点击取消）'
-            //         : '点击置顶';
-            //     document.querySelector('.window-title').textContent = title;
-            // });
-
-            // 关闭悬浮窗
+            // 1. 点击关闭按钮（增强触屏响应）
             closeBtn.addEventListener('click', function (e) {
                 e.stopPropagation();
-                floatingWindow.style.display = 'none';
+                closeFloatingWindow();
             });
+            // 兼容移动端触摸事件
+            closeBtn.addEventListener('touchend', function (e) {
+                e.stopPropagation();
+                closeFloatingWindow();
+            }, { passive: true });
 
-            // 拖拽功能实现
+            // ========== 拖拽功能（保留原有逻辑并优化） ==========
             let isDragging = false;
             let startX, startY, initialX, initialY;
+            // 新增：滑动关闭相关变量
+            let startDragX = 0;
+            const SWIPE_THRESHOLD = 50; // 滑动关闭阈值（像素）
 
-            // 开始拖拽
-            floatingWindow.addEventListener('mousedown', function (e) {
+            // PC端鼠标事件
+            floatingWindow.addEventListener('mousedown', startDrag);
+            document.addEventListener('mousemove', dragMove);
+            document.addEventListener('mouseup', endDrag);
+
+            // 移动端触摸事件
+            floatingWindow.addEventListener('touchstart', function (e) {
+                const touch = e.touches[0];
+                startDrag({
+                    clientX: touch.clientX,
+                    clientY: touch.clientY
+                });
+                e.preventDefault();
+            }, { passive: false });
+
+            document.addEventListener('touchmove', function (e) {
+                if (!isDragging) return;
+                const touch = e.touches[0];
+                dragMove({
+                    clientX: touch.clientX,
+                    clientY: touch.clientY
+                });
+                e.preventDefault();
+            }, { passive: false });
+
+            document.addEventListener('touchend', endDrag);
+
+            // 开始拖拽（PC和移动端共用）
+            function startDrag(e) {
                 isDragging = true;
-
-                // 记录初始位置
                 startX = e.clientX;
                 startY = e.clientY;
+                // 记录初始位置
                 initialX = floatingWindow.offsetLeft;
                 initialY = floatingWindow.offsetTop;
-
-                // 提高拖拽时的层级
+                // 记录拖拽起始X坐标（用于判断滑动关闭）
+                startDragX = e.clientX;
+                // 提高层级
                 floatingWindow.style.zIndex = 9999;
-            });
+            }
 
-            // 拖拽移动
-            document.addEventListener('mousemove', function (e) {
+            // 拖拽移动（PC和移动端共用）
+            function dragMove(e) {
                 if (!isDragging) return;
 
                 // 计算偏移量
@@ -439,20 +471,39 @@
                 // 设置新位置
                 floatingWindow.style.left = `${initialX + dx}px`;
                 floatingWindow.style.top = `${initialY + dy}px`;
-
-                // 清除默认的right和bottom属性
                 floatingWindow.style.right = 'auto';
                 floatingWindow.style.bottom = 'auto';
-            });
+            }
 
-            // 结束拖拽
-            document.addEventListener('mouseup', function () {
-                isDragging = false;
-                // 如果不是置顶状态，恢复默认层级
-                if (!floatingWindow.classList.contains('top')) {
-                    floatingWindow.style.zIndex = 1000;
+            // 结束拖拽（新增滑动关闭判断）
+            function endDrag(e) {
+                if (!isDragging) return;
+
+                // 计算水平滑动距离
+                let endX = 0;
+                if (e.type === 'touchend') {
+                    // 触摸结束时取最后一个触摸点
+                    endX = e.changedTouches ? e.changedTouches[0].clientX : startDragX;
+                } else {
+                    // 鼠标松开时取当前坐标
+                    endX = e.clientX || startDragX;
                 }
-            });
+
+                const swipeDistance = endX - startDragX;
+
+                // 判断是否触发滑动关闭（向右滑动超过阈值）
+                if (swipeDistance > SWIPE_THRESHOLD) {
+                    closeFloatingWindow();
+                } else {
+                    // 恢复默认层级
+                    if (!floatingWindow.classList.contains('top')) {
+                        floatingWindow.style.zIndex = 1000;
+                    }
+                }
+
+                isDragging = false;
+            }
+
         </script>
 </body>
 

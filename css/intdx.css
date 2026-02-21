@@ -152,106 +152,114 @@
       border-color: #3b82f6;
   }
 
-  /* 悬浮窗容器样式 */
-  .floating-window {
-      position: fixed;
-      right: 30px;
-      bottom: 30px;
-      width: 150px;
-      background: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      overflow: hidden;
-      cursor: move;
-      /* 拖拽光标 */
-      z-index: 1000;
-      /* 默认层级 */
-      transition: all 0.3s ease;
-  }
+   /* 悬浮窗容器样式 */
+        .floating-window {
+            position: fixed;
+            right: 30px;
+            bottom: 30px;
+            width: 150px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            cursor: move;
+            touch-action: none;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            /* 新增：关闭动画 */
+            transform: translateX(0);
+        }
 
-  /* 置顶状态样式 */
-  .floating-window.top {
-      z-index: 9999;
-      /* 置顶层级 */
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-      transform: scale(1.05);
-  }
+        /* 置顶状态样式 */
+        .floating-window.top {
+            z-index: 9999;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            transform: scale(1.05) translateX(0);
+        }
 
-  /* 悬浮窗头部 */
-  .window-header {
-      background: #409eff;
-      color: white;
-      padding: 8px 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      /* 点击置顶光标 */
-  }
+        /* 关闭动画 */
+        .floating-window.closing {
+            transform: translateX(200%);
+            opacity: 0;
+        }
 
-  .window-title {
-      font-size: 14px;
-      font-weight: 500;
-  }
+        /* 悬浮窗头部 - 优化关闭按钮区域 */
+        .window-header {
+            background: #409eff;
+            color: white;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+        }
 
-  .close-btn {
-      width: 20px;
-      height: 20px;
-      line-height: 20px;
-      text-align: center;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
-      cursor: pointer;
-      font-size: 14px;
-  }
+        .window-title {
+            font-size: 14px;
+            font-weight: 500;
+        }
 
-  /* 二维码展示区域 */
-  .qrcode-container {
-      padding: 10px;
-      text-align: center;
-  }
+        /* 优化关闭按钮 - 放大点击区域，增强触屏体验 */
+        .close-btn {
+            width: 24px;   /* 增大尺寸 */
+            height: 24px;  /* 增大尺寸 */
+            line-height: 24px;
+            text-align: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            font-size: 16px;
+            /* 关键：扩大点击热区 */
+            position: relative;
+        }
+        /* 伪元素扩大点击区域（触屏友好） */
+        .close-btn::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+        }
+        /* 触摸反馈 */
+        .close-btn:active {
+            background: rgba(255, 255, 255, 0.5);
+            transform: scale(0.95);
+        }
 
-  .qrcode-img {
-      width: 100%;
-      height: auto;
-      border: 1px solid #eee;
-      border-radius: 4px;
-  }
+        /* 二维码展示区域 */
+        .qrcode-container {
+            padding: 10px;
+            text-align: center;
+        }
 
-  .qrcode-tip {
-      margin-top: 8px;
-      font-size: 12px;
-      color: #666;
-  }
+        .qrcode-img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
 
-  /* 1. CSS层面禁止文本选择 */
-  body {
-      /* 禁止文本选择 */
-      -webkit-user-select: none;
-      /* Chrome, Safari, Opera */
-      -moz-user-select: none;
-      /* Firefox */
-      -ms-user-select: none;
-      /* IE 10+ */
-      user-select: none;
-      /* 标准语法 */
+        .qrcode-tip {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #666;
+        }
 
-      /* 可选：禁止拖拽 */
-      -webkit-user-drag: none;
-      user-drag: none;
-  }
+        /* 滑动关闭提示（移动端显示） */
+        .swipe-tip {
+            font-size: 11px;
+            color: #999;
+            padding: 5px 0;
+            text-align: center;
+            display: none; /* 默认隐藏 */
+        }
+        /* 移动端显示滑动提示 */
+        @media (max-width: 768px) {
+            .swipe-tip {
+                display: block;
+            }
+        }
 
-  /* 如果需要允许特定区域可选择，可单独设置 */
-  .allow-select {
-      -webkit-user-select: text;
-      -moz-user-select: text;
-      -ms-user-select: text;
-      user-select: text;
-  }
-
-  .container {
-      max-width: 800px;
-      margin: 50px auto;
-      padding: 20px;
-      line-height: 1.6;
-  }
+  
