@@ -537,8 +537,29 @@
                 isDragging = false;
             }
 
-
+            // 兼容
+            function scrollToTop() {
+                if ('scrollBehavior' in document.documentElement.style) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    // 手动实现平滑滚动（兼容iOS/Android老旧浏览器）
+                    let scrollTop = window.scrollY;
+                    const step = () => {
+                        scrollTop = scrollTop - Math.max(1, scrollTop / 10);
+                        window.scrollTo(0, scrollTop);
+                        if (scrollTop > 0) requestAnimationFrame(step);
+                    };
+                    requestAnimationFrame(step);
+                }
+            }
+            // PC端
             document.getElementById('innerBackToTop').addEventListener('click', scrollToTop);
+            // 手机端
+            innerBackToTop.addEventListener('touchend', function (e) {
+                e.stopPropagation(); // 阻止事件冒泡到悬浮窗的拖拽逻辑
+                e.preventDefault();  // 禁用默认行为
+                scrollToTop();       // 执行回到顶部
+            }, { passive: false });
         </script>
 </body>
 
