@@ -223,3 +223,35 @@
       font-size: 12px;
       color: #666;
   }
+
+  /* 1. CSS层面禁止文本选择 */
+  body {
+      /* 禁止文本选择 */
+      -webkit-user-select: none;
+      /* Chrome, Safari, Opera */
+      -moz-user-select: none;
+      /* Firefox */
+      -ms-user-select: none;
+      /* IE 10+ */
+      user-select: none;
+      /* 标准语法 */
+
+      /* 可选：禁止拖拽 */
+      -webkit-user-drag: none;
+      user-drag: none;
+  }
+
+  /* 如果需要允许特定区域可选择，可单独设置 */
+  .allow-select {
+      -webkit-user-select: text;
+      -moz-user-select: text;
+      -ms-user-select: text;
+      user-select: text;
+  }
+
+  .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      line-height: 1.6;
+  }
