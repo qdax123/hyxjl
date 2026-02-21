@@ -144,3 +144,34 @@ window.addEventListener('beforeunload', function (e) {
 });
 
 // 悬浮窗
+ // ========== 回到顶部核心功能 ==========
+        const backToTopBtn = document.getElementById('backToTop');
+        
+        // 1. 监听页面滚动，控制按钮显示/隐藏
+        window.addEventListener('scroll', function() {
+            // 页面滚动超过300px时显示按钮
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
+        });
+
+        // 2. 点击回到顶部（核心函数）
+        function scrollToTop() {
+            // 平滑滚动到顶部
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth' // 平滑动画，移除则为瞬间跳转
+            });
+        }
+
+        // 3. 绑定PC端点击事件
+        backToTopBtn.addEventListener('click', scrollToTop);
+
+        // 4. 绑定移动端触摸事件
+        backToTopBtn.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            scrollToTop();
+        }, { passive: false });

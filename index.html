@@ -13,6 +13,33 @@
     <link rel="stylesheet" href="./css/intdx.css">
     <link rel="icon" type="image/x-icon" href="./static/Logo-版权所有-何永轩-2026.svg" />
     <script src="./js/index.js"></script>
+    <style>
+        body {
+            /* 兼容所有浏览器的禁止选择属性 */
+            -webkit-user-select: none;
+            /* Chrome/Safari/Opera */
+            -moz-user-select: none;
+            /* Firefox */
+            -ms-user-select: none;
+            /* IE/Edge */
+            user-select: none;
+            /* 标准语法 */
+
+            /* 额外：禁止文本拖拽 */
+            -webkit-user-drag: none;
+            user-drag: none;
+        }
+
+        /* ========== 2. 允许特定区域选择文本 ========== */
+        .allow-select,
+        .allow-select * {
+            /* 包含子元素都允许选择 */
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+    </style>
     <!-- 自定义Tailwind配置 -->
     <script>
         tailwind.config = {
@@ -29,6 +56,8 @@
                 }
             }
         }
+
+
     </script>
 </head>
 
@@ -287,6 +316,10 @@
                 <img src="./image/微信.png" alt="二维码" class="qrcode-img">
                 <p class="qrcode-tip">扫码关注公众号</p>
             </div>
+            <div class="back-to-top-inner" style="padding: 8px; text-align: center; cursor: pointer; color: #409eff;"
+                id="innerBackToTop">
+                回到顶部
+            </div>
         </div>
         <!-- 页脚 -->
         <footer class="mt-12 text-center text-gray-500 py-4">
@@ -417,7 +450,7 @@
             let startX, startY, initialX, initialY;
             // 新增：滑动关闭相关变量
             let startDragX = 0;
-            const SWIPE_THRESHOLD = 50; // 滑动关闭阈值（像素）
+            const SWIPE_THRESHOLD = 100; // 滑动关闭阈值（像素）
 
             // PC端鼠标事件
             floatingWindow.addEventListener('mousedown', startDrag);
@@ -504,6 +537,8 @@
                 isDragging = false;
             }
 
+
+            document.getElementById('innerBackToTop').addEventListener('click', scrollToTop);
         </script>
 </body>
 
